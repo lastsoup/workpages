@@ -1,0 +1,98 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{title}} {%endblock%}
+{% block content %}
+<div id="detail_info">
+    <div class="detail">
+        <table width="100%" border="1" cellpadding="5px" cellspacing="0" bordercolor="#ddd">
+            <tbody>
+            <tr> <td class="detail_td"> <span>项目编号</span> </td>
+                <td> <span name="ProjectNum"></span> </td>
+            </tr>
+            <tr> <td> <span>项目名称</span> </td>
+                <td> <span name="ProjectName"></span> </td>
+            </tr>
+            <tr> <td> <span>项目所属城市</span> </td>
+                <td> <span name="ProjectCityName"></span> </td>
+            </tr>
+            <tr> <td> <span>项目所属区域</span> </td>
+                <td> <span name="ProjectDistricts"></span> </td>
+            </tr>
+            <tr> <td> <span>项目详细地址</span> </td>
+                <td> <span name="ProjectAddress"></span> </td>
+            </tr>
+            <tr> <td> <span>甲方公司名称</span> </td>
+                <td> <span name="PartACompanyName"></span> </td>
+            </tr>
+            <tr> <td> <span>甲方联系人姓名</span> </td>
+                <td> <span name="PartACompanyContactName"></span> </td>
+            </tr>
+            <tr> <td> <span>甲方联系方式</span> </td>
+                <td> <span name="PartACompanyContactTele"></span> </td>
+            </tr>
+            <tr> <td> <span>项目负责人</span> </td>
+                <td> <span name="ProjectHeaderName"></span> </td>
+            </tr>
+            <tr> <td> <span>项目负责人联系方式</span> </td>
+                <td> <span name="ProjectHeaderTele"></span> </td>
+            </tr>
+            <tr> <td> <span>甲方付款情况</span> </td>
+                <td> <span name="PartAPayInfo"></span> </td>
+            </tr>
+            <tr> <td> <span>预算金额</span> </td>
+                <td> <span name="BudgetAmount"></span> </td>
+            </tr>
+            <tr> <td> <span>预算税金</span> </td>
+                <td> <span name="BudgetTax"></span> </td>
+            </tr>
+            <tr> <td> <span>预算成本金额</span> </td>
+                <td> <span name="BudgetCost"></span> </td>
+            </tr>
+            <tr> <td> <span>当前项目状态</span> </td>
+                <td> <span name="ShowProjectProgressStateName"></span> </td>
+            </tr>
+            <tr> <td> <span>计划开工时间</span> </td>
+                <td> <span name="PlanStartTime"></span> </td>
+            </tr>
+            <tr> <td> <span>计划完成时间</span> </td>
+                <td> <span name="PlanEndTime"></span> </td>
+            </tr>
+            <tr> <td> <span>实际开工时间</span> </td>
+                <td> <span name="RealStartTime"></span> </td>
+            </tr>
+            <tr> <td> <span>实际完成时间</span> </td>
+                <td> <span name="RealEndTime"></span> </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="footer"><div class="line"></div><span>云仙智慧</span><div class="line"></div></div>
+{% endblock %}
+{% block script %}
+<style>
+    .page{bottom:52px;}
+</style>
+<script>
+    $(function () {
+        $.ajax({
+            type : "post",
+            async:false,
+            url : host+"/PFServiceAPI.asmx/GetProjectList",
+            data: {"PageRequestData":'{"Token":"123456789",Page:"1",Rows:"15",IsValid:"1",Obj:{"ProjectGuid":"{{menu.id}}"}}'},
+            success : function(data){
+                var item=data.obj.rows[0];
+               $("#detail_info span[name]").each(function(n){
+                    var name=$(this).attr("name");
+                    var val=item[name];
+                    $(this).html(val);
+                });
+            },
+            timeout:1000,
+            error:function(e){
+                as().showAlert("连接出错！");
+            }
+        });
+    });
+</script>
+{% endblock %}

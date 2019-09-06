@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{title}} {%endblock%}
+{% block content %}
+<div id="detail_info">
+    <div class="detail">
+        <table width="100%" border="1" cellpadding="5px" cellspacing="0" bordercolor="#ddd">
+            <tbody>
+            <tr> <td class="detail_td"> <span>备注</span> </td>
+                <td> <span name="Name"></span> </td>
+            </tr>
+            <tr> <td class="detail_td"> <span>供应商</span> </td>
+                <td> <span name="Name"></span> </td>
+            </tr>
+            <tr> <td> <span>消费人姓名</span> </td>
+                <td> <span name="Code"></span> </td>
+            </tr>
+            <tr> <td> <span>消费时间</span> </td>
+                <td> <span name="ProjectName"></span> </td>
+            </tr>
+            <tr> <td> <span>消费金额</span> </td>
+                <td> <span name="PartyB"></span> </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="footer"><div class="line"></div><span>云仙智慧</span><div class="line"></div></div>
+{% endblock %}
+{% block script %}
+<style>
+    .page{bottom:52px;}
+</style>
+<script>
+    $(function () {
+
+    });
+</script>
+{% endblock %}

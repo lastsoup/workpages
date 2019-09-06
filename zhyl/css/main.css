@@ -1,0 +1,197 @@
+html{
+    *overflow: hidden;
+}
+
+.page{
+    width: 100%;
+    height: 100%;
+    min-width: 550px;
+}
+
+.floor1
+{
+    width: 100%;
+    height: 72px;
+    overflow: hidden;
+    top: 0;
+    background:url("../images/main/head-bg.jpg") repeat-x;
+
+}
+
+.floor1 .logo{background:url("../images/main/head-logo.jpg"); width: 200px;height: 100%;margin-left: 16px;_margin-left:8px;float: left;}
+.floor1 .info-right{float: right;height: 100%;}
+
+.floor1 ul.headright
+{
+    height: 72px;
+    float: right;
+}
+
+.floor1  li.message{width: 100px;height: 100%; float: left;margin-right:8px;background:url("../images/main/head-bg1.jpg"); cursor: pointer;}
+.floor1  li.message .message-ico
+{
+    background: url("../images/main/head-message.png") no-repeat center;
+    _background: url("../images/main/head-message.gif") no-repeat center;
+    height: 100%;
+}
+
+.floor1  li.message .number
+{
+    background-image: url("../images/main/message-number.png");
+    _background-image: url("../images/main/message-number.gif");
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    border-radius: 50%;
+    top: 35px;
+    margin-left: 53px;
+    position: absolute;
+    text-align: center;
+    *line-height: 12px;
+}
+
+.floor1  li.message .number span{color: #ffffff;font-size: 10px;}
+.floor1  li.headimg{ height:100%;float: left;background:url("../images/main/head-bg2.jpg");}
+.floor1  li.headimg .head-image{width: 48px;margin: 12px 10px 0 15px;float: left;}
+.floor1  li.headimg .head-image img{width: 48px;height: 48px; border-radius:50%;border: 0;}
+
+.floor1 li.info{width: 140px;height: 100%;  float: left;margin-right:8px;_margin-right:4px;
+    cursor: pointer;background:url("../images/main/head-bg2.jpg");}
+.floor1 li.info .info-text{color: #ffffff;line-height: 72px;width: 125px;position: relative;}
+.floor1 li.info .info-text .welcome{float: left;}
+.floor1 li.info .info-text .name
+{
+    width: 90px;
+    display: block;
+    float:left;
+}
+.floor1 li.info .info-text  .arrow
+{
+    background: url("../images/main/head-arrow.png") no-repeat center;
+    _background: url("../images/main/head-arrow.gif") no-repeat center;
+    display: block;
+    position: absolute;
+    top: 0;
+    right:-8px;
+    width: 8px;
+    height: 72px;
+    float: left;
+}
+
+.floor1  ul.slidedown{
+    width: 140px;
+    position: absolute;
+    top: 72px;
+    z-index: 2;
+    display: none;
+}
+
+.floor1  ul.slidedown li{
+    height: 36px;line-height:36px;text-align: left;
+    cursor: pointer;
+    vertical-align:middle;
+}
+
+.floor1  ul.slidedown li .opacity
+{
+    width: 100%;
+    height: 36px;
+    opacity: 0.6;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=60);
+    background: #0b89c3;
+    position: absolute;
+    font-family: "Gulim";
+    color: #fff;
+}
+
+.floor1  ul.slidedown li a:hover .opacity{
+    background: #015980;
+}
+
+.floor1  ul.slidedown li a{color: #fff;}
+.floor1  ul.slidedown li .ico{
+    zoom: 1;
+    background: url("../images/main/grzs.png") no-repeat;
+    width: 25px;
+    height: 25px;
+    float: left;
+    margin-top: 6px;
+    margin-left: 10px;
+}
+.floor1  ul.slidedown li .quit .ico{background-position: 0 -24px;}
+.floor1  ul.slidedown li .setting .ico{background-position: 0 0;}
+
+.floor1  ul.slidedown li .text span{margin-left: 10px;}
+
+.floor1  ul.slidedown li .text,.floor1  ul.slidedown li a:hover .text
+{
+    background-color: transparent;
+    opacity: 1;
+    filter: Alpha(opacity=100);
+}
+
+.floor2
+{
+    position: absolute;
+    top: 72px;
+    bottom: 0px;
+    width: 100%;
+    overflow: hidden;
+    min-width: 550px;
+    float: left;
+    height:auto;
+}
+
+.left-menu
+{
+    width: 196px;
+    height:100%;
+    float: left;
+    background: url("../images/main/left-menu-bg.jpg") no-repeat bottom left;
+    background-color:#009bd4;
+    color: #ffffff;
+    overflow-y:auto;
+    overflow-x:hidden;
+    position: relative;
+}
+
+.right-main
+{
+    height: 100%;
+    margin-left: 196px;
+    background-color:#fff;
+    overflow:hidden;
+}
+
+.left-menu ul li{height: 55px;line-height: 55px;  padding: 0 15px;cursor: pointer; position: relative;}
+
+.left-menu ul .ico
+{
+    display: block;
+    width:25px;
+    height: 25px;
+    margin-top: 16px;
+    margin-right: 10px;
+    _margin-right: 6px;
+    float: left;
+    vertical-align: middle;
+    background: url("../images/main/menu-ico.png") no-repeat;
+    _background: url("../images/main/menu-ico.gif") no-repeat;
+}
+
+.left-menu ul .ico-home{background-position: 0 0;}
+.left-menu ul .ico-device{background-position: 0 -23px;}
+.left-menu ul .ico-vehicle{background-position: 0 -48px;}
+.left-menu ul .ico-user{background-position: 0 -71px;}
+.left-menu ul .ico-sys{background-position: 0 -95px;}
+.left-menu ul .ico-ecg{background-position: 0 -120px;margin-top: 18px;height: 23px;}
+.left-menu ul .ico-message{background-position: 0 -143px;}
+.left-menu .hover-bg
+{
+    position: absolute;
+    width: 100%;
+    height: 55px;
+    background-color: #21b3ec;
+    opacity: 0.7;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=70);
+}

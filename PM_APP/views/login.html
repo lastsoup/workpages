@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta name="keywords" content="项目管理系统"/>
+    <meta name="description" content="项目管理系统" />
+    <meta name="apple-mobile-web-app-title" content="项目管理系统">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"  />
+    <meta name="apple-mobile-web-app-capable" content="yes"  />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="full-screen" content="yes">
+    <meta name="format-detection" content="telephone=no"  />
+    <title>项目管理系统－登录</title>
+    <link rel="stylesheet" href="/css/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/AdminLTE.css">
+    <link rel="stylesheet" href="/js/iCheck/square/green.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_lxckul3sx0xp3nmi.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+</head>
+<body class="hold-transition login-page layout-boxed">
+<div class="login-box">
+    <div class="login-logo">
+        <a href="javascript:;"><b>项目管理系统</b></a>
+    </div><!-- /.login-logo -->
+    <div class="login-box-body">
+        <form>
+            <div class="form-group has-feedback" id="usererror">
+                <label class="control-label errortip" for="inputError"><i class="fa fa-times-circle-o"></i>&nbsp;<span class="text"></span></label>
+                <div style="position: relative;">
+                <input type="user" class="form-control" placeholder="用户名" name="username" id="username">
+                <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+            </div>
+            <div class="form-group has-feedback" id="passworderror"> <!--has-error-->
+              <label class="control-label errortip" for="inputError"><i class="fa fa-times-circle-o"></i>&nbsp;<span class="text"></span></label>
+               <div style="position: relative;">
+                <input type="password" class="form-control" placeholder="密码" name="password" id="password">
+                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+               </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-8">
+                    <div class="checkbox icheck">
+                        <label class="label-switch">
+                            <input type="checkbox" id="isremember">
+                            <div class="checkbox"></div>
+                        </label>
+                        <label>
+                            <!--<input type="checkbox">-->
+                            下次自动登录
+                        </label>
+                    </div>
+                </div><!-- /.col -->
+                <div class="col-xs-4">
+                    <button type="button" id="btnlogin" class="btn btn-login btn-block">登录</button>
+                </div><!-- /.col -->
+            </div>
+        </form>
+       <!-- <a href="javascript:;">忘记密码</a>
+        <a href="javascript:;" class="text-center" style="float:right;">注册新用户</a>-->
+
+    </div><!-- /.login-box-body -->
+</div><!-- /.login-box -->
+<div id="loading_login"><div class="iconfont icon-loading"></div></div>
+<!-- jQuery 2.1.4 -->
+<script src="/js/jQuery-2.1.4.min.js"></script>
+<script src="/js/method.js"></script>
+<script>
+    $(function () {
+/*        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%'
+        });*/
+
+        loginHander.LoginPage();
+        $('#btnlogin').click(function() {
+            /*var Server = [{ Value: "mis.hy-nj.com", Name: "恒永MIS"
+            }];
+            dataHander.setItem("userinfo",Server);
+            window.location.href="/index";*/
+            loginHander.LoginButtonClick();
+
+        });
+
+    });
+</script>
+</body>
+</html>
+

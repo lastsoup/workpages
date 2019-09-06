@@ -1,0 +1,293 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{title}} {%endblock%}
+{% block content %}
+<div class="census">
+<div class="block" style="margin-top: 10px;">
+<div class="title"><span id="projectname"></span>－项目表</div>
+<table id="mytable" class="table table-condensed" style="background-color: #fff;">
+    <thead>
+    <tr>
+        <th width="20%">名称</th>
+        <th width="50%">时间</th>
+        <th colspan="2" width="30%">状态</th>
+        <!-- <th style="border-right: 0;">进度</th>
+         <th style="width: 20px;"></th>-->
+    </tr>
+    </thead>
+    <tbody>
+   <!-- <tr>
+        <td>阶段一</td>
+        <td>2017-09-01</td>
+        <td colspan="2"><span class="badge bg-red">开始</span></td>
+    </tr>
+    <tr>
+        <td>阶段二</td>
+        <td>2017-09-01</td>
+        <td colspan="2"><span class="badge bg-yellow">结束</span></td>
+    </tr>
+    <tr>
+        <td>阶段三</td>
+        <td>2017-09-01</td>
+        <td colspan="2"><span class="badge bg-light-blue">进行</span></td>
+    </tr>-->
+    <tr>
+        <td><b>总周期</b></td>
+        <td><span id="PlanStartTime"></span>至<span id="PlanEndTime"></span></td>
+        <td width="80%">
+            <div class="progress progress-xs">
+                <div class="progress-bar progress-bar-green" id="processBar"></div>
+            </div>
+        </td>
+        <td width="20%">
+            <span class="badge bg-green" id="processText"></span>
+        </td>
+    </tr>
+    </tbody></table>
+</div>
+<div class="block">
+    <div class="title">项目完成情况</div>
+    <div id="totalchart" style="width:100%;height:200px;"></div>
+</div>
+    <div class="block">
+        <div class="title">项目花费情况</div>
+        <div id="costchart" style="width:100%;height:200px;"></div>
+    </div>
+<div class="footer"><div class="line"></div><span>云仙智慧</span><div class="line"></div></div>
+</div>
+
+
+
+{% endblock %}
+{% block script %}
+<style>
+    .page{bottom:52px;}
+</style>
+<script src="http://echarts.baidu.com/dist/echarts.simple.min.js"></script>
+<script src="http://echarts.baidu.com/asset/theme/roma.js"></script>
+<script>
+    function GetProjectProcess()
+    {
+        $.ajax({
+            type : "post",
+            async:false,
+            url : host+"/PFServiceAPI.asmx/GetProjectProgressList",
+            data: {"PageRequestData":'{"Token":"123456789",Page:"1",Rows:"99999",IsValid:"1",Obj:{"ProjectGuid":"{{menu.id}}"}}'},
+            success : function(data){
+                $.each(data.obj.rows,function(i) {
+                    GetProcessState(this.ProjectProgressStateName);
+                });
+            },
+            timeout:1000,
+            error:function(e){
+                as().showAlert("连接出错！");
+            }
+        });
+
+    }
+
+    function GetProcessState(id)
+    {
+        $.ajax({
+            type: "post",
+            async: false,
+            url: host + "/PFServiceAPI.asmx/GetProjectProgressStateList",
+            data: {"PageRequestData": '{"Token":"123456789",Page:"1",Rows:"99999",IsValid:"1",Obj:{"ProjectProgressStateGuid":"'+id+'"}}'},
+            success: function (data) {
+                var item=data.obj.rows[0];
+                var UpdateDate=as().formatDateString(item.UpdateDate, "-", false);
+                var content=' <tr><td>阶段'+item.ProjectProgressStateLevel+'</td><td>'+UpdateDate+'</td><td colspan="2"><span class="badge bg-light-blue">'+item.ProjectProgressStateName+'</span></td></tr>';
+                $("#mytable tbody").prepend(content);
+            },
+            timeout: 1000,
+            error: function (e) {
+                as().showAlert("连接出错！");
+            }
+        });
+    }
+
+    function  GetProjectInfo(){
+        $.ajax({
+            type : "post",
+            async:false,
+            url : host+"/PFServiceAPI.asmx/GetProjectList",
+            data: {"PageRequestData":'{"Token":"123456789",Page:"1",Rows:"15",IsValid:"1",Obj:{"ProjectGuid":"{{menu.id}}"}}'},
+            success : function(data){
+                var item=data.obj.rows[0];
+                var Proportion=item.ShowProportion==null?"0":item.ShowProportion;
+                $("#projectname").html(item.ProjectName);
+                $("#PlanStartTime").html(item.PlanStartTime);
+                $("#PlanEndTime").html(item.PlanEndTime);
+                $("#processBar").width(Proportion+"%");
+                $("#processText").html(Proportion+"%");
+            },
+            timeout:1000,
+            error:function(e){
+                as().showAlert("连接出错！");
+            }
+        });
+    }
+
+   function GetCostInfo()
+   {
+       $.ajax({
+           type : "post",
+           async:false,
+           url : host+"/PFServiceAPI.asmx/GetProjectSpendMoneyRecordList",
+           data:{"PageRequestData":'{"Token":"123456789",Page:"1",Rows:"9999",IsValid:"1",Obj:{"ProjectGuid":"{{menu.id}}"}}'},
+           success : function(data){
+              /* var costData={name:[],money:[]};
+               $.each(data.obj.rows,function() {
+                   costData.name.push(this.SpendMoneyReMark);
+                   costData.money.push(this.SpendMoney);
+               });*/
+               var costData={name:["预算金额","预算成本金额","实际花费"],money:[]};
+               var total=0;
+               $.each(data.obj.rows,function() {
+                   total=total+this.SpendMoney;
+               });
+               costData.money.push(total);
+               $.ajax({
+                   type: "post",
+                   async: false,
+                   url: host + "/PFServiceAPI.asmx/GetProjectList",
+                   data: {"PageRequestData": '{"Token":"123456789",Page:"1",Rows:"15",IsValid:"1",Obj:{"ProjectGuid":"{{menu.id}}"}}'},
+                   success: function (data) {
+                       var item=data.obj.rows[0];
+                       costData.money.push(item.BudgetCost);
+                       costData.money.push(item.BudgetAmount);
+                   },
+                   timeout: 1000,
+                   error: function (e) {
+                       as().showAlert("连接出错！");
+                   }
+               });
+               SetCostChart(costData);
+
+           },
+           timeout:1000,
+           error:function(e){
+               as().showAlert("连接出错！");
+           }
+       });
+   }
+
+    function GetCensusInfo()
+    {
+        $.ajax({
+            type : "post",
+            async:false,
+            url : host+"/PFServiceAPI.asmx/GetProjectStatisticalStage",
+            data:{"RequestData":'{"Token":"123456789",IsValid:"1",Obj:"{{menu.id}}"}'},
+            success : function(data){
+                if(data.obj.length==1) {
+                    var item=data.obj[0];
+                    GetChartData(item);
+                }else
+                {
+                    $.ajax({
+                        type : "post",
+                        async:false,
+                        url : host+"/PFServiceAPI.asmx/GetAllProjectProgressStateList",
+                        success : function(data){
+                            GetChartData({Count:data.obj.total,ProjectProgressStateLevel:0});
+                        },
+                        timeout:1000,
+                        error:function(e){
+                            as().showAlert("连接出错！");
+                        }
+                    });
+                }
+
+            },
+            timeout:1000,
+            error:function(e){
+                as().showAlert("连接出错！");
+            }
+        });
+    }
+
+    function GetChartData(item)
+    {
+        var projData={color:[],data:[]};
+
+        for (var i = 1; i <= item.Count; i++) {
+            var n = {value: 1, name: '阶段' + i};
+            var color = i <= item.ProjectProgressStateLevel ? "#C23531" : "#91C7AE";
+            projData.color.push(color);
+            projData.data.push(n);
+        }
+        SetProjectChart(projData);
+    }
+
+    function SetProjectChart(projData)
+    {
+        var myChart2 = echarts.init(document.getElementById('totalchart'));
+        var option2 = {
+            series : [
+                {
+                    name: '总情况项目',
+                    type: 'pie',
+                    radius: '55%',
+                    radius: ['50%', '90%'],
+                    color:projData.color,
+                    data:projData.data
+                }
+            ]
+        };
+
+        myChart2.setOption(option2);
+    }
+
+   function SetCostChart(data)
+   {
+       var myChart1 = echarts.init(document.getElementById('costchart'));
+       var option1 = {
+           grid: {
+               top:30,
+               bottom:30
+           },
+           legend: {
+               top:"10px",
+               left:"10px"
+           },
+           xAxis: {
+               data: data.name
+           },
+           yAxis: {
+             show:false
+           },
+           series: [{
+               type: 'bar',
+               data: data.money.reverse(),
+               itemStyle: {
+                   normal: {
+                       color: function(n){
+                           var colorList = ['#C23531','#91C7AE','#F2BE2C'];
+                           return colorList[n.dataIndex];
+                       },
+                       label : {
+                           show: true,
+                           position:"top",
+                           textStyle : {
+                               fontWeight : '400',
+                               fontSize : '12',
+                               color:'#000'
+                           }
+                       }
+                   }
+               }
+           }]
+       };
+       myChart1.setOption(option1);
+   }
+
+    $(function () {
+        GetProjectProcess();
+        GetProjectInfo();
+        GetCostInfo();
+        GetCensusInfo();
+    });
+
+</script>
+{% endblock %}

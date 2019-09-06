@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="keywords" content="项目管理系统"/>
+    <meta name="description" content="项目管理系统" />
+    <meta name="apple-mobile-web-app-title" content="项目管理系统">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"  />
+    <meta name="apple-mobile-web-app-capable" content="yes"  />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="full-screen" content="yes">
+    <meta name="format-detection" content="telephone=no"  />
+    <title>项目管理系统-{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="/css/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_369827_j61ullrpzl6ry66r.css" />
+    <link rel="stylesheet" href="/css/skins/_all-skins.min.css" />
+    <link rel="stylesheet" href="/css/AdminLTE.css">
+    <link rel="stylesheet" href="/js/nprogress/nprogress.css" />
+    <script src='/js/nprogress/nprogress.js'></script>
+</head>
+<body class="hold-transition skin-black-light sidebar-mini fixed ">
+<div class="wrapper">
+    <header class="main-header">
+        <!-- Logo -->
+        <div  class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>项目</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg">
+                <a href="javascript:history.go(-1)" class="fanhui" id="btnback"><i class="iconfont icon-zuo"></i></a>
+                <b>{{header}}</b>
+            </span>
+        </div>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="/project/list" class="iconfont icon-liebiao1 sidebar-toggle"  role="button"><!--data-toggle="offcanvas"-->
+                <span class="sr-only"></span>
+            </a>
+            <!--首页-->
+            <a href="/index" class="sidebar-toggle">
+                <i class="iconfont icon-shouye"></i>
+            </a>
+            <div class="navbar-custom-menu" style="float:left;">
+                <ul class="navbar-nav">
+                <!--筛选-->
+                {% if filter %}
+                <li class="dropdown" id="filter_dropdown">
+                    <a href="javascript:;" style="border-left: 0" class="sidebar-toggle" data-toggle="dropdown"><i class="iconfont icon-xia"></i></a>
+                    <ul id="filter_menu" class="dropdown-menu" style="padding:0;left:0;right: auto;min-width: 350px;background: #ddd;">
+                        <li class="filter selected" id="ListOrder">
+                            <span>默认排序</span >
+                            <div class="son">
+                                <a class="active" actionOrder="desc">时间<i class="iconfont icon-desc"></i></a>
+                                <a actionOrder="asc">时间<i class="iconfont icon-asc"></i></a>
+             <!--                   <a>编号<i class="iconfont icon-desc"></i></a>
+                                <a>名称<i class="iconfont icon-desc"></i></a>-->
+                            </div>
+                        </li>
+                        <li class="filter" id="ProcessState">
+                            <span>状态筛选</span>
+                            <div class="son">
+                                <a class="active" actionId="">全部</a>
+                            </div>
+                        </li>
+                        <li class="filter" id="DateState">
+                            <span>分段筛选</span>
+                            <div class="son">
+                                <a class="active" actionDate="">全部</a>
+                                <a actionDate="Week">最近一周</a>
+                                <a actionDate="Month">最近一个月</a>
+                                <a actionDate="Year">最近一年</a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                {% endif %}
+                {% if search %}
+                <!--搜索-->
+                <li class="dropdown">
+                    <a href="javascript:;" style="border-left: 0" class="sidebar-toggle" data-toggle="dropdown"><i class="iconfont icon-sousuo"></i></a>
+                    <ul class="dropdown-menu" style="left:0;right: auto;">
+                        <form  class="navbar-form navbar-left" role="search" style="margin-left:0;margin-right: 0;padding-top: 0;padding-bottom: 0;">
+                            <div class="form-group">
+                                <input name="id" type="hidden" value="{{menu.id}}">
+                                <input name="name" type="text" class="form-control" id="navbar-search-input" placeholder="搜索">
+                            </div>
+                        </form>
+                    </ul>
+                </li>
+                {% endif %}
+            </ul>
+            </div>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="/images/tongxiang1.jpg" class="user-image" alt="User Image">
+                            <span class="hidden-xs" id="userName"> </span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                <img src="/images/tongxiang2.jpg" class="img-circle" alt="User Image">
+                                <p>
+                                    <span id="userRole"></span>
+                                    <small>我就是我，不一样的烟火</small>
+                                </p>
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="/profile" class="btn btn-default btn-flat">个人信息</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="javascript:;" class="btn btn-default btn-flat" id="loginout">退出</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class="iconfont icon-settings"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper" style="margin-left: 0;">
+        <!-- Main content -->
+         <div class="page">
+            {% block content %}{% endblock %}
+         </div>
+        {% if menu.show %}
+        <nav id="js-tabbar" class="bar-index mybar" style="height: 52px;">
+            {% set info = [
+            {href:'/project/detail',icon:'icon-xiangmu1',text:'信息'},
+            {href:'/project/advance',icon:'icon-jindu',text:'进度'},
+            {href:'/project/cost',icon:'icon-feiyong',text:'费用'},
+            {href:'/project/census',icon:'icon-0065',text:'统计'},
+            ] %}
+            {% for item in info %}
+            <a class="tab-item {% if loop.index==menu.index %}tab-selected{% endif %}" href="{{item.href}}?id={{menu.id}}">
+                <div class="div-img-center">
+                    <i class="icon iconfont {{item.icon}}"></i>
+                </div>
+                <div class="font-style">{{item.text}}</div>
+            </a>
+            {% endfor %}
+        </nav>
+        {% endif %}
+       <!-- /.content -->
+    </div><!-- /.content-wrapper -->
+    <aside class="control-sidebar control-sidebar-light" style="border-bottom: 1px solid #d2d6de;">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs"></ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Home tab content -->
+            <div class="tab-pane" id="control-sidebar-home-tab"></div>
+        </div>
+    </aside>
+ <!--   <div class="control-sidebar-bg"></div>-->
+</div><!-- ./wrapper -->
+<!--加载层-->
+<div id="loading_login"><div class="iconfont icon-loading"></div></div>
+<!--提示对话框弹出层-->
+<div name="divAlert" style="display:none">
+    <div  class="divAlert_box"><span name="alertText"></span></div>
+</div>
+<script src="/js/jQuery-2.1.4.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/method.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/demo.js"></script>
+<script>
+    $(function () {
+       //处理登录和自动登录
+        loginHander.AllPage();
+        $("#loginout").click(function(){
+            loginHander.LoginOut();
+        });
+    });
+ </script>
+<!--每个页面的脚本处理-->
+{% block script %}{% endblock %}
+</body>
+</html>

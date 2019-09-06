@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="keywords" content="项目管理系统"/>
+    <meta name="description" content="项目管理系统" />
+    <meta name="apple-mobile-web-app-title" content="项目管理系统">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"  />
+    <meta name="apple-mobile-web-app-capable" content="yes"  />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="full-screen" content="yes">
+    <meta name="format-detection" content="telephone=no"  />
+    <title>项目管理系统-{% block title %}{% endblock %}</title>
+    <!--Bootstrap基础样式[ REQUIRED ]-->
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <link rel="stylesheet" href="/css/nifty.css" >
+    <link rel="stylesheet" href="/css/icon/nifty-demo-icons.css" >
+    <link rel="stylesheet" href="/css/nifty-demo.css" >
+    <!--JAVASCRIPT-->
+    <!--=================================================-->
+    <!--Pace - 页面加载控件 [OPTIONAL]-->
+    <link href="/js/plugins/pace/pace.min.css" rel="stylesheet">
+    <script src="/js/plugins/pace/pace.min.js"></script>
+    <!--jQuery [ REQUIRED ]-->
+    <script src="/js/base/jquery-2.2.4.min.js"></script>
+    <script src="/js/base/bootstrap.js"></script>
+    <script src="/js/base/nifty.js"></script>
+    <script src="/js/base/nifty-demo.js"></script>
+    <!--弹出框 [ REQUIRED ]-->
+    <script src="/js/plugins/layer/layer.js"></script>
+    <!--页面修改样式by－cqy[ REQUIRED ]-->
+    <link rel="stylesheet" href="/css/demo.css" >
+    <!--页面通用方法by－cqy [ REQUIRED ]-->
+    <script src="/js/plugin.js"></script>
+    <!--theme Style [ 初始化的配色方案 ]-->
+    <script>
+        var theme= $.fn.dataHander.getItem("theme");
+        if(theme)
+            document.write(' <link id="theme" href="'+theme+'" rel="stylesheet">')
+    </script>
+</head>
+<body>
+<script>
+    var setting= $.fn.dataHander.getItem("setting");
+    if(!setting)
+    {
+        var defaultVal={"boxed-layout":false,"effect":true,"navbar-fixed":true,
+            "footer-fixed":true,"mainnav-fixed":true,"mainnav-sm":false,
+            "aside-in":false,"aside-fixed":false,"aside-float":true,"aside-bright":true};
+        $.fn.dataHander.setItem("setting",defaultVal);
+        setting=defaultVal;
+    }
+    var styleSetting= $.map(setting,function(n,item){
+        return n?item:"";
+    }).join(' ');
+    document.write(' <div id="container" class="mainnav-lg '+styleSetting+'">')
+    /*document.write(' <div id="container" class="effect aside-float aside-bright mainnav-lg navbar-fixed footer-fixed mainnav-fixed">')*/
+</script>
+<!--NAVBAR-->
+<!--===================================================-->
+<header id="navbar">
+<div id="navbar-container" class="boxed">
+
+<!--Brand logo & name-->
+<!--================================-->
+<div class="navbar-header">
+    <a href="/" class="navbar-brand">
+        <img src="/img/logo.png" alt="Logo" class="brand-icon">
+        <div class="brand-title">
+            <span class="brand-text">项目管理系统</span>
+        </div>
+    </a>
+</div>
+<!--================================-->
+<!--End brand logo & name-->
+<!--Navbar Dropdown-->
+<!--================================-->
+{% include "../part/dropdown.html" %}
+<!--================================-->
+<!--End Navbar Dropdown-->
+
+</div>
+</header>
+<!--===================================================-->
+<!--END NAVBAR-->
+
+<div class="boxed">
+
+<!--CONTENT CONTAINER-->
+<!--===================================================-->
+<div id="content-container">
+    {% block content %}{% endblock %}
+    <!--===================================================-->
+   <!-- <div id="page-content">
+        <div class="panel">
+            {% if !hidden.heading %}
+            <div class="panel-heading" id="panel-heading" style="display: block;">
+                <h3 class="panel-title" id="cpage-title">当前页面</h3>
+                <ol class="breadcrumb">
+                    <li><a href="/SysManage/Index">主页</a><i class="arrow"></i></li>
+                    <li><a href="javascript:;" id="parent-title">上级页面</a><i class="arrow"></i></li>
+                    <li class="active" id="current-title">当前页面</li>
+                </ol>
+            </div>
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>-->
+    <!--===================================================-->
+    <!--End page content-->
+</div>
+<!--===================================================-->
+<!--END CONTENT CONTAINER-->
+<!--ASIDE-->
+<!--===================================================-->
+{% include "../part/aside.html" %}
+<!--===================================================-->
+<!--END ASIDE-->
+<!--MAIN NAVIGATION-->
+<!--===================================================-->
+{% include "../part/leftmenu.html" %}
+<!--===================================================-->
+<!--END MAIN NAVIGATION-->
+
+</div>
+
+<!-- FOOTER -->
+<!--===================================================-->
+<footer id="footer">
+    <center><p class="pad-lft">©2018 版权所有 菠萝工作室</p></center>
+</footer>
+<!--===================================================-->
+<!-- END FOOTER -->
+<!-- SCROLL PAGE BUTTON -->
+<!--===================================================-->
+<button class="scroll-top btn">
+    <i class="pci-chevron chevron-up"></i>
+</button>
+
+<!-- END OF CONTAINER -->
+{% include "../part/setting.html" %}
+<!--每个页面的脚本处理-->
+{% block script %}{% endblock %}
+</body>
+</html>

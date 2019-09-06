@@ -1,0 +1,360 @@
+body
+{
+    background-position: center;
+    background-repeat: no-repeat;
+
+}
+
+
+#container.boxed-layout.mainnav-lg #mainnav-container {
+    left: auto;
+}
+
+#container.boxed-layout.mainnav-sm #mainnav-container
+{
+    left: auto;
+}
+
+
+@media (min-width: 1200px) {
+    #container.boxed-layout.aside-fixed.aside-in #aside-container {
+        width: 255px;
+        overflow: hidden;
+        position: absolute;
+    }
+
+    #container.boxed-layout.aside-fixed #aside-container {
+        width: 0;
+        overflow: hidden;
+        position: absolute;
+    }
+
+    #container.boxed-layout .boxed {
+        margin: 0 auto 0;
+    }
+
+    #container.boxed-layout.mainnav-fixed.navbar-fixed #mainnav-container{padding-top: 40px;}
+}
+
+
+input:-webkit-autofill{
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+
+
+
+.loginpage .form-horizontal .form-group{margin-left:0;margin-right: 0;text-align: left;}
+.has-error .form-control:focus,.has-error .form-control{border-color: #f00;}
+.loginpage .has-error .help-block {
+    color: #f00;
+    background: transparent url(http://www.0non0.com/Content/Images/validation-error-message.png) no-repeat 0 0;
+    position: absolute;
+    white-space: nowrap;
+    padding: 16px 5px 3px;
+    z-index: 1;
+}
+
+.loginpage .has-success .form-control
+{
+    border-color: #e9e9e9;
+}
+
+#page-content {
+    padding: 0;
+}
+
+#mainnav-menu i {
+    padding: 0 10px 0 0;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.pad-btm .text-muted {
+    font-size: 18px;
+    font-weight: 500;
+    color: #777;
+}
+
+#panel-heading .panel-title
+{
+    float: left;
+}
+
+#panel-heading .breadcrumb
+{
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+
+#panel-heading
+{
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 1px 4px rgba(0,0,0,.1);
+    line-height: 50px;
+    display: none;
+    background-color: #fff;
+}
+
+.heading-border
+{
+    width: 100%;
+    height: 8px;
+    line-height: 8px;
+    _font-size: 1px;
+    background: url(http://www.0non0.com/Content/Images/top-border.jpg) bottom repeat-x;
+    margin: 0 auto;
+    border-left: 1px solid #e5e5e5;
+    border-right: 1px solid #e5e5e5;
+    border-radius: 5px;
+    position: absolute;
+    bottom: 0;
+}
+
+.breadcrumb .arrow:before {
+    content: '';
+    border-style: solid;
+    border-width: 0.1em 0.1em 0 0;
+    display: inline-block;
+    height: 0.4em;
+    left: 0;
+    position: relative;
+    top: -1px;
+    width: 0.4em;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    font-size: 1.15em;
+    margin: 0 2px;
+}
+
+.breadcrumb > li + li:before{
+    content:none;
+}
+
+
+.spinner {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    margin: 5px 30px;
+}
+
+.double-bounce1, .double-bounce2 {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #67CF22;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    -webkit-animation: bounce 2.0s infinite ease-in-out;
+    animation: bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce2 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+}
+
+@-webkit-keyframes bounce {
+    0%, 100% { -webkit-transform: scale(0.0) }
+    50% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+    } 50% {
+          transform: scale(1.0);
+          -webkit-transform: scale(1.0);
+      }
+}
+
+.brand-icon {
+    background-color: #fff;
+    border: 1px solid #333;
+    border-radius: 3px;
+}
+
+#container.mainnav-in .brand-icon, #container.mainnav-sm .brand-icon, #container.mainnav-lg .brand-icon {
+    background-color: #fff;
+}
+
+.demo-nifty-btn .btn {
+    margin: 5px 7px 5px 0;
+    padding: 3px 10px;
+}
+
+.demo-nifty-btn .btn:not(.btn-icon) {
+    min-width: auto;
+}
+
+#container .table-bordered td.editor-td{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+table.table-bordered tbody td {
+    vertical-align: middle;
+}
+
+div.dataTables_processing
+{
+    z-index: 1;
+}
+
+.form-horizontal .control-label i {
+    font-style: normal;
+    color: #F00;
+    font-family: "SimSun";
+    padding-right: 4px;
+}
+
+#cpage-title,.breadcrumb{ display: none;}
+
+.bootstrap-select.btn-group:not(.input-group-btn), .bootstrap-select.btn-group[class*="col-"] {
+   margin-left:0;
+}
+
+.dataTables_empty
+{
+    text-align: center;
+}
+
+table.dataTable tr.child ul.status-list {
+    list-style: none;
+    color: #333;
+}
+
+table.dataTable tr.child ul.status-list li
+{
+    border-bottom: none;
+    margin-bottom: -2px;
+    height: 30px;
+    line-height: 30px;
+    border-left: 1px solid #d9d9d9;
+    padding: 0;
+}
+
+
+.status-list li:before {
+    content: '';
+    border: 3px solid #f3f3f3;
+    background-color: #d9d9d9;
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border-radius: 5px;
+    margin-left: -6px;
+    margin-right: 10px;
+}
+
+.status-list .date {
+    font-weight: 700;
+    margin-right: 18px;
+    font-family: Arial;
+}
+
+.status-list .senduser {
+    font-weight: 700;
+    color: #31b131;
+    margin-right: 8px;
+}
+
+.status-list .receiveuser {
+    font-weight: 700;
+    color: #f40;
+    margin-right: 8px;
+}
+
+.status-list .text {
+    display: inline-block;
+    vertical-align: text-top;
+    line-height: 1.3em;
+}
+
+.status-list .latest {
+    border: none;
+}
+
+.status-list .latest:before {
+    background-color: #fe4300;
+    border-color: #f8e9e4;
+}
+
+.navbar-fixed .list-group {
+    margin-bottom: 40px;
+}
+
+#content-container{
+    padding-bottom: 0;
+}
+
+/*form表单样式 Start*/
+.view .td-data input,.view .td-data textarea,.view .td-data .bootstrap-select .btn-default,.view .td-data .input-group,.view .td-data select{display: none;}
+.edit .td-data .input-group{display: table;}
+.edit .td-data input,.edit .td-data textarea,.edit.td-data select,.edit .td-data .bootstrap-select .btn-default{display:block;}
+.form-wrap{padding:20px 10px;color: #333;}
+.form-wrap .formTitleDiv{text-align: center;line-height: 40px;}
+.form-wrap .title{font-weight: bold;color: #333;font-size: 25px;}
+.form-wrap table{width:100%; border-collapse: collapse; table-layout: fixed; line-height:22px; margin-top:3px;}
+.form-wrap .td-lable{background-color:#fff; text-align: right; background-color: #f1f9fe; padding: 3px; border: 1px solid #6faadb; }
+.form-wrap .td-lable label{margin-bottom: 0}
+.form-wrap .td-data{background-color:#fff; text-align: left;   padding: 6px 20px 6px 6px; border: 1px solid #6faadb; }
+.form-wrap .form-control,.form-wrap .chosen-container-single .chosen-single{border-color: rgb(169, 169, 169);}
+.form-wrap .td-data textarea{width: 100%;height: 70px;}
+.form-wrap .date .form-control,.form-wrap .input-group-addon{border-color: #d1d9de;}
+/*.form-wrap .dropzone{padding: 10px;border-color: rgb(169, 169, 169);background-color: #fff;}
+.form-wrap .dropzone .dz-preview .dz-image{width: 100px;height: 100px;z-index: 1;}
+.form-wrap .dropzone .dz-preview .dz-download{ z-index: 21;width: 100%;height: 100%;display: block;cursor: pointer;position: absolute;}
+.form-wrap .dropzone .dz-preview .dz-remove{position: absolute;width: 100%;}*/
+.form-wrap .has-error .form-control:focus,.form-wrap .has-error .form-control,
+.form-wrap .has-error .chosen-container-single .chosen-single{border-color: #f00;}
+.form-wrap .has-error .bootstrap-select .dropdown-toggle,.form-wrap .error .bootstrap-select .dropdown-toggle{border-color: #f00;}
+.form-wrap .btn-area {text-align: center;padding: 10px; display: none;}
+.approval-modal .select-div{line-height:30px;text-align: right;padding-right: 30px;}
+.approval-modal .textarea-div{line-height: 40px;;text-align: right;padding-right: 30px;margin-bottom: 0;}
+.approval-modal .control-label{margin-right: 10px;}
+/*form表单样式 End*/
+
+/*附件的样式 Start*/
+.dropzone.form-dropzone{padding: 10px;border-color: rgb(169, 169, 169);background-color: #fff;}
+.dropzone.form-dropzone .dz-preview .dz-image{width: 100px;height: 100px;z-index: 1;}
+.dropzone.form-dropzone .dz-preview .dz-download{ z-index: 21;width: 100%;height: 100%;display: block;cursor: pointer;position: absolute;}
+.dropzone.form-dropzone .dz-preview .dz-remove{position: absolute;width: 100%;}
+
+.dropzone.modal-dropzone{padding: 10px;border-color: rgb(169, 169, 169);background-color: #fff;}
+.dropzone.modal-dropzone .dz-preview{min-height: 50px; }
+.dropzone.modal-dropzone .dz-preview .dz-image{width: 100px;height: 100px;z-index: 1;}
+.dropzone.modal-dropzone .dz-preview .dz-download{ z-index: 21;width: 100%;height: 100%;display: block;cursor: pointer;position: absolute;}
+.dropzone.modal-dropzone .dz-preview .dz-remove{position: absolute;width: 100%;}
+/*附件的样式 End*/
+
+/*Icon的样式 Start*/
+@font-face {
+    font-family: 'iconfont';  /* project id 504910 */
+    src: url('//at.alicdn.com/t/font_504910_10bfxso9che8w7b9.eot');
+    src: url('//at.alicdn.com/t/font_504910_10bfxso9che8w7b9.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_504910_10bfxso9che8w7b9.woff') format('woff'),
+    url('//at.alicdn.com/t/font_504910_10bfxso9che8w7b9.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_504910_10bfxso9che8w7b9.svg#iconfont') format('svg');
+}
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/*Icon的样式 End*/
+
+.mask-message
+{
+    z-index:3;width:auto;height:16px;line-height:16px;position:absolute;top:50%;left:50%;margin-top:-20px;margin-left:-92px;border:2px solid #d4d4d4;padding: 12px 5px 10px 45px;background: #ffffff;
+}

@@ -1,0 +1,549 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{title}} {%endblock%}
+{% block content %}
+<!--<iframe src="/project/gantt" style="-webkit-transform:rotate(90deg);transform:rotate(90deg);"
+        width="100%" frameborder="no" border="0" marginwidth="0" marginheight="0"  allowtransparency="yes"></iframe>-->
+<div id="adchart"></div>
+<div class="footer"><div class="line"></div><span>云仙智慧</span><div class="line"></div></div>
+{% endblock %}
+{% block script %}
+<style>
+    .page{bottom:52px;}
+</style>
+<script src="http://echarts.baidu.com/dist/echarts.simple.min.js"></script>
+<!--<script language="javascript">
+function dateAfter(dateStr,num){
+    var date1 = new Date(Date.parse(dateStr.replace(/-/g,   "/")));
+    //alert(date1.getFullYear()+"-"+(date1.getMonth()+1)+"-"+date1.getDate());
+    var date2 = new Date(date1);
+    date2.setDate(date1.getDate()+num);
+    var times = date2.getFullYear()+"-"+(date2.getMonth()+1)+"-"+date2.getDate();
+    return times;
+}
+function GetDateDiff(startDate,endDate){
+    var startTime = new Date(Date.parse(startDate.replace(/-/g,   "/"))).getTime();
+    var endTime = new Date(Date.parse(endDate.replace(/-/g,   "/"))).getTime();
+    var dates = (startTime - endTime)/(1000*60*60*24);
+    return  dates;
+}
+
+
+//var url = "${path}/notice/groupFirstCheckNotice!initGantt.action?projectId=${resultjson.projectId}";
+var totalCategory = 0,category=[],planData=[],planBase=[],actualData=[],actualBase=[],legend=[];
+var globalmin = null;
+var json = {
+    "currStageIndexList": [
+        8,
+        9
+    ],
+    "currStageList": [
+        "初步验收",
+        "试运行"
+    ],
+    "stageList": [
+        {
+            "planBeginDate": "2016-08-31",
+            "name": "设计审查",
+            "endDate": "2016-04-22",
+            "beginDate": "2016-04-22",
+            "planEndDate": "2016-10-05"
+        },
+        {
+            "planBeginDate": "2016-10-05",
+            "name": "设计批复",
+            "endDate": "2016-04-22",
+            "beginDate": "2016-04-22",
+            "planEndDate": "2016-10-12"
+        },
+        {
+            "planBeginDate": "2016-10-12",
+            "name": "工程交接",
+            "endDate": "2016-04-22",
+            "beginDate": "2016-04-22",
+            "planEndDate": "2016-10-26"
+        },
+        {
+            "planBeginDate": "2016-10-26",
+            "name": "设备到货验收",
+            "endDate": "2016-04-22",
+            "beginDate": "2016-04-22",
+            "planEndDate": "2016-11-25"
+        },
+        {
+            "planBeginDate": "2016-11-25",
+            "name": "开工启动",
+            "endDate": "2016-04-22",
+            "beginDate": "2016-04-22",
+            "planEndDate": "2016-12-25"
+        },
+        {
+            "planBeginDate": "2016-12-25",
+            "name": "设备安装",
+            "endDate": "2016-04-22",
+            "beginDate": "2016-04-22",
+            "planEndDate": "2017-01-01"
+        },
+        {
+            "planBeginDate": "2017-01-01",
+            "name": "系统调测",
+            "endDate": "2016-04-22",
+            "beginDate": "2016-04-22",
+            "planEndDate": "2017-01-08"
+        },
+        {
+            "planBeginDate": "2017-01-08",
+            "name": "割接上线",
+            "endDate": "2016-04-22",
+            "beginDate": "2016-04-22",
+            "planEndDate": "2017-01-15"
+        },
+        {
+            "planBeginDate": "2017-01-15",
+            "name": "初步验收",
+            "endDate": "2017-04-17",
+            "beginDate": "2017-01-22",
+            "planEndDate": "2017-04-15"
+        },
+        {
+            "planBeginDate": "2017-04-15",
+            "name": "试运行",
+            "endDate": "2017-11-17",
+            "beginDate": "2017-05-12",
+            "planEndDate": "2017-10-12"
+        },
+        {
+            "planBeginDate": "2017-10-12",
+            "name": "竣工验收",
+            "endDate": "",
+            "beginDate": "",
+            "planEndDate": "2017-12-11"
+        }
+    ],
+    "projectId": 8211
+}
+//$.getJSON(url,function(json){
+$(function(){
+    if(json && json.stageList){
+        totalCategory = json.stageList.length;
+        var minPlan = null, minActual = null, max = null;
+        for(var i=(totalCategory-1);i>=0;i--){
+            var planStart = json.stageList[i].planBeginDate;
+            var actualStart = json.stageList[i].beginDate;
+            if(i==(json.stageList.length-1)){
+                var dateTT = new Date();
+                var dstr = dateTT.getFullYear()+"-"+(dateTT.getMonth()+1)+"-"+dateTT.getDate()
+                minPlan = planStart || dstr;
+                minActual = actualStart || dstr;
+                max = planStart;
+            }
+            if(GetDateDiff(max,json.stageList[i].planEndDate)<0){
+                max = json.stageList[i].planEndDate;
+            }
+            if(GetDateDiff(max,json.stageList[i].endDate)<0){
+                max = json.stageList[i].endDate;
+            }
+            if(GetDateDiff(minPlan,planStart)>0){
+                minPlan = planStart;
+            }
+            if(GetDateDiff(minActual,actualStart)>0){
+                minActual = actualStart;
+            }
+        }
+
+        var min = null;
+        if(GetDateDiff(minPlan,minActual)>=0){
+            min = minActual;
+        }else{
+            min = minPlan;
+        }
+        globalmin = min;
+        for(var i=(totalCategory-1);i>=0;i--){
+            var planStart = json.stageList[i].planBeginDate;
+            var planEnd = json.stageList[i].planEndDate;
+            var actualStart = json.stageList[i].beginDate;
+            var actualEnd = json.stageList[i].endDate;
+
+            category.push(json.stageList[i].name);
+            planBase.push(GetDateDiff(planStart,globalmin));
+            var pd = {};
+            pd.value = GetDateDiff(actualEnd,actualStart);
+            pd.color = '#FF0000';
+            var currentStage = json.currStageList;
+            var sName = json.stageList[i].name;
+            if(currentStage && $.inArray(sName, currentStage)>-1){
+                pd.color = '#FFFF00';
+            }
+            planData.push(GetDateDiff(planEnd,planStart));
+            actualBase.push(GetDateDiff(actualStart,globalmin));
+            actualData.push(pd);
+
+        }
+        for(var i=0;i<GetDateDiff(max,min);i++){
+            var dt = dateAfter(min,i);
+            legend.push(dt);
+        }
+        init();
+    }
+});
+function init(){
+    var myChart = echarts.init(document.getElementById('adchart'));
+    var option = {
+        title: {
+            text: '',
+            subtext: ''
+        },
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            },
+            formatter: function (params) {
+                var tar0 = params[0];
+                var tar1 = params[1];
+                var tar2 = params[2]
+                var tar3 = params[3];
+                var result = tar2.seriesName + ' : ' + dateAfter(globalmin,tar2.value-0) + '<br/>' +
+                        tar3.seriesName + ' : ' + dateAfter(globalmin,tar2.value+tar3.value)+ '<br/>' +
+                        tar0.seriesName + ' : ' + dateAfter(globalmin,tar0.value-0) + '<br/>' +
+                        tar1.seriesName + ' : ' + dateAfter(globalmin,tar0.value+tar1.value);
+                return result;
+            }
+        },
+        xAxis : [
+            {
+                type : 'value',
+                splitNumber: legend.length-1,
+                max: legend.length-1,
+                axisLabel:{
+                    show: false
+                },
+                splitLine:{
+                    show: false
+                }
+            },
+            {
+                type : 'category',
+                boundaryGap : false,
+                data : legend
+            }
+        ],
+        yAxis : [
+            {
+                type : 'category',
+                splitLine: {show:false},
+                data : category
+            }
+        ],
+        series : [
+            {
+                name:'实际开始时间',
+                type:'bar',
+                stack: '总量1',
+                itemStyle:{
+                    normal:{
+                        barBorderColor:'rgba(0,0,0,0)',
+                        color:'rgba(0,0,0,0)'
+                    },
+                    emphasis:{
+                        barBorderColor:'rgba(0,0,0,0)',
+                        color:'rgba(0,0,0,0)'
+                    }
+                },
+                data:actualBase
+            },
+            {
+                name:'实际完成时间',
+                type:'bar',
+                stack: '总量1',
+                itemStyle : { normal: {
+                    color:function(params) {
+                        //alert(JSON.stringify(params));
+                        return params.data.color;
+                    },label : {show: true, position: 'inside'}}},
+                data:actualData
+            },
+            {
+                name:'计划开始时间',
+                type:'bar',
+                stack: '总量',
+                itemStyle:{
+                    normal:{
+                        barBorderColor:'rgba(0,0,0,0)',
+                        color:'rgba(0,0,0,0)'
+                    },
+                    emphasis:{
+                        barBorderColor:'rgba(0,0,0,0)',
+                        color:'rgba(0,0,0,0)'
+                    }
+                },
+                data:planBase
+            },
+            {
+                name:'计划完成时间',
+                type:'bar',
+                stack: '总量',
+                itemStyle : {
+                    normal: {
+                        color:'#00AA55',
+                        label : {
+                            show: true,
+                            position: 'inside'
+                        }
+                    }
+                },
+                data:planData
+            }
+        ]
+    };
+    myChart.setOption(option);
+
+}
+
+var option = {
+        xAxis: {
+            type: "time", // x轴时间类型<br>        position: "top" // x轴位于上方
+            position: "top"
+        },
+        grid:grid,
+        yAxis: {
+            type: "category",
+            data: ["项目总周期", "阶段一", "阶段二", "阶段三"].reverse()
+        },
+        series: [
+            {
+                type: 'bar',
+                barWidth: '30',
+                barGap: "-100%", // 计划和进度重叠
+                stack: "计划",  // 占位条和着色条合并
+                itemStyle: {
+                    normal: {
+                        opacity: 0 // 不绘制，仅作为占位条
+                    },
+                    emphasis: {
+                        opacity: 0
+                    }
+                },
+                data: [
+                    [new Date(2016,3,1), "项目总周期"],
+                    [new Date(2016,3,1), "阶段一"],
+                    [new Date(2016,3,29), "阶段二"],
+                    [new Date(2016,5,10), "阶段三"]
+                ]
+            },
+            {
+                type: 'bar',
+                barWidth: '30',
+                stack: "计划",
+                itemStyle: {
+                    normal: {
+                        color: '#91C7AE'
+                    }
+                },
+                data: [
+                    [new Date(2016,6,30), "项目总周期"],
+                    [new Date(2016,3,29), "阶段一"],
+                    [new Date(2016,5,10), "阶段二"],
+                    [new Date(2016,6,30), "阶段三"]
+                ]
+            },
+            {
+                type: 'bar',
+                barWidth: '30',
+                stack: "进度",
+                itemStyle: {
+                    normal: {
+                        opacity: 0
+                    },
+                    emphasis: {
+                        opacity: 0
+                    }
+                },
+                data: [
+                    [new Date(2016,3,1), "项目总周期"],
+                    [new Date(2016,3,1), "阶段一"],
+                    [new Date(2016,3,29), "阶段二"],
+                    [new Date(2016,5,10), "阶段三"]
+                ]
+            },
+            {
+                type: 'bar',
+                barWidth: '30',
+                stack: "进度",
+                itemStyle: {
+                    normal: {
+                        color: '#C23531'
+                    }
+                },
+                data: [
+                    [new Date(2016,4,30), "项目总周期"],
+                    [new Date(2016,3,29), "阶段一"],
+                    [new Date(2016,4,30), "阶段二"],
+                    [new Date(2016,5,10), "阶段三"]
+                ]
+            }
+        ]
+    };
+</script>-->
+<script>
+
+    if (navigator.userAgent.match(/(iPhone|iPod|Android|ios|iPad)/i)) {
+        $("#adchart").height($("#adchart").parent().width() * 0.9);
+        $("#adchart").css({"-webkit-transform": "rotate(90deg)", "transform": "rotate(90deg)"});
+        var grid = {
+            left: 100,
+            top: 20,
+            bottom: 10
+        };
+    }else
+    {
+        $("#adchart").height(500);
+        var grid=null;
+    }
+
+    function GetCensusInfo()
+    {
+        $.ajax({
+            type : "post",
+            async:false,
+            url : host+"/PFServiceAPI.asmx/GetProjectStatisticalStage",
+            data:{"RequestData":'{"Token":"123456789",IsValid:"1",Obj:"{{menu.id}}"}'},
+            success : function(data){
+                if(data.obj.length==1) {
+                    var item=data.obj[0];
+                    GetAdChartData(item);
+                }else
+                {
+                    $.ajax({
+                        type : "post",
+                        async:false,
+                        url : host+"/PFServiceAPI.asmx/GetAllProjectProgressStateList",
+                        success : function(data){
+                            GetAdChartData({Count:data.obj.total,ProjectProgressStateLevel:0});
+                        },
+                        timeout:1000,
+                        error:function(e){
+                            as().showAlert("连接出错！");
+                        }
+                    });
+                }
+
+            },
+            timeout:1000,
+            error:function(e){
+                as().showAlert("连接出错！");
+            }
+        });
+    }
+
+    function GetAdChartData(item)
+    {
+        var projData={ydata:["项目总周期"],
+            Fsdata:[[0,"项目总周期"]],
+            Fedata:[[item.ProjectProgressStateLevel,"项目总周期"]],
+            Nsdata:[[item.ProjectProgressStateLevel,"项目总周期"]],
+            Nedata:[[(item.Count-item.ProjectProgressStateLevel),"项目总周期"]]
+        };
+        for (var i = 0; i < item.Count; i++) {
+            var text="阶段"+(i+1);
+            projData.ydata.push(text);//阶段显示数据
+            {
+                //已经完成
+                var Fscount = i < item.ProjectProgressStateLevel ? i : 0;
+                var Fsarry = [Fscount, text];
+                projData.Fsdata.push(Fsarry);//初始占位符
+                var Fecount = i < item.ProjectProgressStateLevel ? 1 : 0;
+                var Fearry = [Fecount, text];
+                projData.Fedata.push(Fearry);//已完成占位符
+            }
+            {
+                //未完成
+                var Nscount = i < item.ProjectProgressStateLevel ? 0: i;
+                var Nsarry = [Nscount, text];
+                projData.Nsdata.push(Nsarry);//初始占位符
+                var Necount = i < item.ProjectProgressStateLevel ? 0 : 1;
+                var Nearry = [Necount, text];
+                projData.Nedata.push(Nearry);//已完成占位符
+            }
+        }
+        SetAdChart(projData);
+    }
+
+    function SetAdChart(projData)
+    {
+        var myChart = echarts.init(document.getElementById('adchart'));
+        var option = {
+            xAxis: {
+                //type: "time", // x轴时间类型<br>        position: "top" // x轴位于上方
+                //position: "top"
+                show:false
+            },
+            grid:grid,
+            yAxis: {
+                type: "category",
+                data: projData.ydata.reverse()
+            },
+            series: [
+                {
+                    type: 'bar',
+                    barWidth: '30',
+                    barGap: "-100%", // 计划和进度重叠
+                    stack: "计划",  // 占位条和着色条合并
+                    itemStyle: {
+                        normal: {
+                            opacity: 0 // 不绘制，仅作为占位条
+                        },
+                        emphasis: {
+                            opacity: 0
+                        }
+                    },
+                    data:projData.Fsdata
+                },
+                {
+                    type: 'bar',
+                    barWidth: '30',
+                    stack: "计划",
+                    itemStyle: {
+                        normal: {
+                            color: '#C23531'
+                        }
+                    },
+                    data: projData.Fedata
+                },
+                {
+                    type: 'bar',
+                    barWidth: '30',
+                    stack: "进度",
+                    itemStyle: {
+                        normal: {
+                            opacity: 0
+                        },
+                        emphasis: {
+                            opacity: 0
+                        }
+                    },
+                    data: projData.Nsdata
+                },
+                {
+                    type: 'bar',
+                    barWidth: '30',
+                    stack: "进度",
+                    itemStyle: {
+                        normal: {
+                            color: '#91C7AE'
+                        }
+                    },
+                    data:projData.Nedata
+                }
+            ]
+        };
+        myChart.setOption(option);
+    }
+
+    $(function () {
+        GetCensusInfo();
+    });
+
+
+</script>
+{% endblock %}

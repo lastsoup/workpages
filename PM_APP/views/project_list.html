@@ -1,0 +1,138 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{title}} {%endblock%}
+{% block content %}
+<div id="discover">
+    <div id="discover_wrapper"></div>
+</div>
+{% endblock %}
+{% block script %}
+<script src="/js/scroll/xui-2.3.2.js"></script>
+<script src="/js/scroll/xui-extend.js"></script>
+<script src="/js/scroll/iscroll.js"></script>
+<script src="/js/scroll/list.js"></script>
+<link rel="stylesheet" href="/js/scroll/app.css">
+<link rel="stylesheet" href="/js/scroll/progress2.css">
+<script>
+    function initList(obj)
+    {
+        var order="{{query.DateOrder}}";
+        order=order==""?"desc":order;
+        new ListScroll("discover",{
+            //url:"http://app.mis.hy-nj.com/Message/GetMessageList?rp=15&sortname=SendTime&sortorder=desc&query=syj",
+            ajax:true,
+            url:host+"/PFServiceAPI.asmx/GetProjectList",
+            dataextend:'ObjExtend:"'+order+'",Obj:"",',
+            pageCount:15,
+            data:{"PageRequestData":'{"Token":"123456789",ObjExtend:"'+order+'",Page:"1",Rows:"15",IsValid:"1",Obj:'+obj+'}'},
+            CreateDetail:function(item)
+            {
+                var CreateDate = as().formatDateString(item.CreateDate, "-", false);
+                var Proportion=item.ShowProportion==null?"0":item.ShowProportion;
+                var li = '<li class="hr">'
+                        + '<a href="/project/detail?id='+item.ProjectGuid+'"  class="item-content">'
+                        + '<div class="item-inner">'
+                        + '<div class="progress-radial progress-'+Proportion+'"><b></b></div>'
+                        + '<div class="content-right"><div class="list-content"><span class="code">['+item.ProjectNum+']</span>&nbsp;<span class="name">'+item.ProjectName+'</span></div>'
+                        + '<div class="list-info"><span>'+item.CreateBy+'</span><span class="date">'+CreateDate+'</span></div>'
+                        + '<i class="iconfont icon-arrow"></i>'
+                        + '</div></div></a></li>';
+                return li;
+            }
+        });
+    }
+
+    function SetProcessState()
+    {
+        $.ajax({
+            type : "post",
+            async:false,
+            url : host+"/PFServiceAPI.asmx/GetAllProjectProgressStateList",
+            data: {"PageRequestData":'{"Token":"123456789",Sn:"",Obj:""}'},
+            success : function(data){
+                $.each(data.obj.rows,function(i){
+                    $("#ProcessState .son").append('<a actionId="'+this.ProjectProgressStateGuid+'">'+this.ProjectProgressStateName+'</a>');
+                });
+                SetDropDownStyle();
+            },
+            timeout:1000,
+            error:function(e){
+                as().showAlert("连接出错！");
+            }
+        });
+
+
+    }
+
+    function ClickGetStateData()
+    {
+        $("#ProcessState .son a").click(function(){
+            var id=$(this).attr("actionId");
+            var selected=$("#filter_menu .selected").index();
+            var active=$(this).index();
+            window.location.href="/project/list?ProgressState="+id+"&selected="+selected+"&active="+active;
+        });
+
+        $("#ListOrder .son a").click(function(){
+            var state=$(this).attr("actionOrder");
+            var selected=$("#filter_menu .selected").index();
+            var active=$(this).index();
+            window.location.href="/project/list?DateOrder="+state+"&selected="+selected+"&active="+active;
+        });
+
+        var datearea=as().getPastDate();
+        $("#DateState .son a").click(function(){
+            var date=$(this).attr("actionDate");
+            var selected=$("#filter_menu .selected").index();
+            var active=$(this).index();
+            switch(date)
+            {
+                case "Week":
+                {
+                    var par="?SearchStartTime="+datearea.week+"&SearchEndTime="+datearea.now;
+                }
+                    break;
+                case "Month":
+                {
+                    var par="?SearchStartTime="+datearea.month+"&SearchEndTime="+datearea.now;
+                }
+                    break;
+                case "Year":
+                {
+                    var par="?SearchStartTime="+datearea.year+"&SearchEndTime="+datearea.now;
+                }
+                    break;
+                default :
+                {
+                    window.location.href="/project/list?selected="+selected+"&active="+active;
+                    return;
+                }
+            }
+
+            window.location.href="/project/list"+par+"&selected="+selected+"&active="+active;
+        });
+    }
+
+    function SetDropDownStyle(){
+        var selected="{{query.selected}}";
+        var active="{{query.active}}";
+        var currentSelected= $("#filter_menu li:eq("+selected+")");
+        $("#filter_menu .selected").removeClass("selected");
+        currentSelected.addClass("selected");
+        $("a.active",currentSelected).removeClass("active");
+        $("a:eq("+active+")",currentSelected).addClass("active");
+    }
+
+    $(function () {
+        $("#filter_menu .filter").click(function(){
+            $("#filter_menu .filter").removeClass("selected");
+            $(this).addClass("selected");
+        });
+        initList('{"SearchStartTime":"{{query.SearchStartTime}}","SearchEndTime":"{{query.SearchEndTime}}","ProjectName":"{{query.name}}","CurrentProjectProgressState":"{{query.ProgressState}}"}');
+        SetDropDownStyle();
+        SetProcessState();
+        //加载状态数据
+        ClickGetStateData();
+    });
+</script>
+{% endblock %}

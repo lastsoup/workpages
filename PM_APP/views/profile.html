@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{title}} {%endblock%}
+{% block content %}
+<div id="detail_info">
+    <div class="detail">
+        <table width="100%" border="1" cellpadding="5px" cellspacing="0" bordercolor="#ddd">
+            <tbody>
+            <tr> <td class="detail_td"> <span>用户账号</span> </td>
+                <td> <span name="PMUserNum"></span> </td>
+            </tr>
+            <tr> <td> <span>用户昵称</span> </td>
+                <td> <span name="PMUserNickName"></span> </td>
+            </tr>
+            <tr> <td> <span>性别</span> </td>
+                <td> <span name="ShowSex"></span> </td>
+            </tr>
+            <tr> <td> <span>手机号1</span> </td>
+                <td> <span name="PMUserTele1"></span> </td>
+            </tr>
+            <tr> <td> <span>手机号2</span> </td>
+                <td> <span name="PMUserTele2"></span> </td>
+            </tr>
+            <tr> <td> <span>邮箱</span> </td>
+                <td> <span name="PMUserMailbox"></span> </td>
+            </tr>
+            <tr> <td> <span>QQ号</span> </td>
+                <td> <span name="PMUserQQ"></span> </td>
+            </tr>
+            <tr> <td> <span>微信号</span> </td>
+                <td> <span name="PMUserWeChat"></span> </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="footer"><div class="line"></div><span>云仙智慧</span><div class="line"></div></div>
+{% endblock %}
+{% block script %}
+<script>
+    $(function () {
+        var userinfo=dataHander.getItem("userinfo");
+        $("#detail_info span[name]").each(function(n){
+            var name=$(this).attr("name");
+            var val=userinfo[name];
+            $(this).html(val);
+        });
+    });
+</script>
+{% endblock %}

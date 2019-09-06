@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>智慧医疗</title>
+    <!--Bootstrap基础样式[ REQUIRED ]-->
+    <link rel="stylesheet" href="/css/bootstrap.css" >
+    <link rel="stylesheet" href="/css/nifty.css" >
+    <link rel="stylesheet" href="/css/icon/nifty-demo-icons.css" >
+    <link rel="stylesheet" href="/css/nifty-demo.css" >
+    <script src="/js/base/jquery-2.2.4.min.js"></script>
+    {% block header %}{% endblock %}
+    <link rel="stylesheet" href="/css/iframe.css" >
+    <!--页面修改样式by－cqy[ REQUIRED ]-->
+    <link rel="stylesheet" href="/css/demo.css" >
+</head>
+<body>
+    {% block content %}{% endblock %}
+<!--每个页面的脚本处理-->
+{% block script %}{% endblock %}
+</body>
+</html>
+

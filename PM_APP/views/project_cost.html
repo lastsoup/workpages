@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{title}} {%endblock%}
+{% block content %}
+<div id="discover">
+    <div id="discover_wrapper"></div>
+</div>
+{% endblock %}
+{% block script %}
+<style>
+    .page{bottom:52px;}
+</style>
+<script src="/js/scroll/xui-2.3.2.js"></script>
+<script src="/js/scroll/xui-extend.js"></script>
+<script src="/js/scroll/iscroll.js"></script>
+<script src="/js/scroll/list.js"></script>
+<link rel="stylesheet" href="/js/scroll/app.css">
+<link rel="stylesheet" href="/js/scroll/progress2.css">
+<script>
+    function initList(obj)
+    {
+        new ListScroll("discover",{
+            skin:"costlist",
+            ajax:true,
+            url:host+"/PFServiceAPI.asmx/GetProjectSpendMoneyRecordList",
+            data:{"PageRequestData":'{"Token":"123456789",Page:"1",Rows:"15",IsValid:"1",Obj:'+obj+'}'},
+            dataextend:'Obj:'+obj+',',
+            CreateDetail:function(item)
+            {
+                var SpendMoneyTime = as().formatDateString(item.SpendMoneyTime, "-", false);
+                var li = '<li class="hr cost">'
+                        + '<a href="javascript:;"  class="item-content">'
+                        + '<div class="item-inner">'
+                        + '<div class="content-right"><div class="list-content"><i class="iconfont icon-shangdian fl"></i><span class="date fr">'+SpendMoneyTime+'</span><span class="supplier fl">'+item.ShowSupplierName+'</span></div>'
+                        + '<div class="list-info" style="color: #000;"><span class="name">'+item.SpendMoneyReMark+'</span><span class="date fr">消费人:&nbsp;'+item.SpendMoneyPersonName+'</span></div>'
+                        + '<div class="list-info" style="text-align: right; padding-top: 0;"><span class="fl">'+item.ShowProjectName+'</span>总计:&nbsp;<span class="total">'+item.SpendMoney+'<i class="iconfont icon-zongjine21"></i></span></div>'
+                        + '<i class="iconfont icon-arrow"></i>'
+                        + '</div></div></a></li>';
+                return li;
+            }
+        });
+    }
+
+    $(function () {
+        $("#filter_menu .filter").click(function(){
+            $("#filter_menu .filter").removeClass("selected");
+            $(this).addClass("selected");
+        });
+        initList('{"ProjectGuid":"{{menu.id}}","SpendMoneyReMark":"{{query.name}}"}');
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,305 @@
+{% extends '../main/layoutsub.html' %}
+
+{% block title %}{{title}}{%endblock%}
+{% block header %}
+<script src="/js/plugins/masked-input/jquery.number.js"></script>
+{% endblock %}
+{% block content %}
+<form id="config-form" class="form-wrap ecg-page"  method="post" action="">
+<div class="formDiv">
+<div class="formTitleDiv">
+    <div id="hidden-area">
+        <input id="hidden_ProjectGuid" type="hidden"  name="ProjectGuid"/>
+    </div>
+    <span id="formTitle" class="title">投标申请单</span>
+</div>
+<table>
+    <colgroup span="6" width="16.6%"></colgroup>
+    <tbody>
+    <tr>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>项目名称：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <input type="text" id="txt-ProjectName" class="form-control" name="ProjectName" placeholder="" />
+        </td>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>项目编号：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <input type="text" id="txt-ProjectNum" class="form-control" name="ProjectNum" placeholder="" />
+        </td>
+    </tr>
+    <tr>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>项目省份：</label>
+        </td>
+        <td class="td-data form-group" colspan="5">
+            <input type="hidden" id="ProjectProvinceName_validator"  class="form-control" name="ProjectProvinceName" />
+            <select class="selectpicker" id="ProjectProvinceName">
+                <option value="-1">----请选择----</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>项目所属城市：</label>
+        </td>
+        <td class="td-data form-group" colspan="5">
+            <input type="hidden" id="ProjectCityName_validator"  class="form-control" name="ProjectCityName" />
+            <select class="selectpicker" id="ProjectCityName">
+                <option value="-1">----请选择----</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-lable">
+            <label class="control-label">项目区域：</label>
+        </td>
+        <td class="td-data form-group" colspan="5">
+            <input type="hidden" id="ProjectAreaName_validator"  class="form-control" name="ProjectAreaName" />
+            <select class="selectpicker" id="ProjectAreaName">
+                <option value="-1">----请选择----</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>项目详细地址：</label>
+        </td>
+        <td class="td-data form-group" colspan="5">
+            <input type="text" id="txt-ProjectAddress" class="form-control" name="ProjectAddress" placeholder=""/>
+            <input type="hidden" id="txt-ProjectDistricts" class="form-control" name="ProjectDistricts" placeholder="" />
+        </td>
+    </tr>
+    <tr>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>甲方公司名称：</label>
+        </td>
+        <td class="td-data form-group" colspan="5">
+            <input type="text" id="txt-PartACompanyName" class="form-control" name="PartACompanyName" placeholder="" />
+        </td>
+    </tr>
+    <tr>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>甲方联系人姓名：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <input type="text" id="txt-PartACompanyContactName" class="form-control" name="PartACompanyContactName" placeholder="" />
+        </td>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>甲方联系方式：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <input type="text" id="txt-PartACompanyContactTele" class="form-control" name="PartACompanyContactTele" placeholder="" />
+        </td>
+    </tr>
+    <tr>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>项目负责人：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <input type="text" id="txt-ProjectHeaderName" class="form-control" name="ProjectHeaderName" placeholder="" />
+        </td>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>项目负责人联系方式：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <input type="text" id="txt-ProjectHeaderTele" class="form-control" name="ProjectHeaderTele" placeholder="" />
+        </td>
+    </tr>
+    <tr>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>预算金额：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <input type="text" id="txt-BudgetAmount" class="form-control" name="BudgetAmount" placeholder="" />
+        </td>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>预算成本金额：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <input type="text" id="txt-BudgetCost" class="form-control" name="BudgetCost" placeholder="" />
+        </td>
+    </tr>
+    <tr>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>预算税：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <input type="text" style="width: 100px;" id="txt-BudgetTax" class="form-control" name="BudgetTax" placeholder="__.__%" />
+        </td>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>投标金额：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <input type="text" id="txt-TenderMoney" class="form-control" name="TenderMoney" placeholder=""/>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>投标人：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <input type="text" id="txt-TenderPerson" class="form-control" name="TenderPerson" placeholder="" />
+        </td>
+        <td class="td-lable">
+            <label class="control-label"><i>*</i>投标时间：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <div class="input-group date" id="txt-TenderTime">
+                <input type="text" id="demo-msk-date" class="form-control" name="TenderTime" placeholder="____-__-__"/>
+                <span class="input-group-addon"><i class="demo-pli-calendar-4"></i></span>
+            </div>
+        </td>
+    </tr>
+    <tr id="hidden_Txt" style="display: none;">
+        <td class="td-lable">
+            <label class="control-label"><i></i>立项人：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <span name="ProjectPerson"></span>
+        </td>
+        <td class="td-lable">
+            <label class="control-label"><i></i>立项时间：</label>
+        </td>
+        <td class="td-data form-group" colspan="2">
+            <span name="ProjectApproval"></span>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-lable">附件：</td>
+        <td class="td-data" colspan="5" name="show">
+            <!--Dropzonejs-->
+            <!--===================================================-->
+            <div id="my-dropzone"  class="dropzone form-dropzone">
+                <input id="hidden_attachList" type="hidden" value="" name="attachList" />
+                <div class="dz-default dz-message">
+                    <div class="dz-icon">
+                        <i class="demo-pli-upload-to-cloud icon-5x"></i>
+                    </div>
+                    <div>
+                        <span class="dz-text">拖动文件上传</span>
+                        <p class="text-sm text-muted">或者点击面板上传</p>
+                    </div>
+                </div>
+                <div class="fallback">
+                    <input name="file" type="file" multiple style="display: none;">
+                </div>
+            </div>
+            <!--===================================================-->
+            <!-- End Dropzonejs -->
+        </td>
+    </tr>
+    <tr>
+        <td class="td-lable">备注：</td>
+        <td class="td-data" colspan="5">
+            <textarea  name="ProjectRemark"></textarea></td>
+    </tr>
+    <tr>
+        <td class="td-lable">测试mask：</td>
+        <td class="td-data" colspan="5">
+            <input style="width: 150px;" type="text" id="mask-date" class="form-control" />
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+<div class="btn-area" id="btn-area">
+    <button type="button" class="btn btn-primary" id="form-save">保存草稿</button>&nbsp;
+    <button type="button" class="btn btn-success" id="form-submit">提交审核</button>&nbsp;
+    <button type="button" class="btn btn-danger" id="form-back">退回审核</button>
+</div>
+</form>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="http://www.388g.com/assets/668af753/pingyin.js"></script>
+<script type="text/javascript">
+    //固定电话999-99999999，手机号码99999999999
+    //$("#mask-date").mask('d',{unlimited:true});//数字s
+    //$("#mask-date").mask('999-99999999');//电话
+    $("#mask-date").number(true,2);//金额
+    //$("#mask-date").number(true,3,{thousands_sep:""});
+    //$("#mask-date").chinesenumber();
+    //$("#mask-date").val($.fn.ConvertToChineseMoney(123213.90));
+    pinyin("大放送");
+    function pinyin(f){
+        //var f = $('#af1').val();
+        var e=f.length;
+        var l="";
+        var k=new RegExp("[a-zA-Z0-9- ]");
+        var type =1;
+        if (f==''){
+            alert('请输入需要转换成拼音的中文！');return false;
+        }
+        //alert(type);
+        for(var j=0;j<e;j++){
+            var m=f.substr(j,1);
+            var g=getchar(m,d);
+            if(k.test(m)){
+                if($('#blzm').is(':checked'))
+                    l+=m;
+            }else{
+                if(g!==false){
+
+                    switch(type)
+                    {
+                        case '1':
+                            l+=g;
+                            break;
+                        case '2':
+                            l+=m+g;
+                            break;
+                        case '3':
+                            l+=g+m;
+                            break;
+                        default:
+                            l+=g;
+                            break;
+                    }
+                    /*
+                     if(pjandchina[0].checked)l+=g;
+                     else if(pjandchina[1].checked)l+=m+g;
+                     else l+=g+m;
+                     */
+                    if($('#tjkg').is(':checked'))//添加空格
+                        l+=' ';
+                }else
+                {
+                    if($('#blbd').is(':checked'))//保留标点
+                        l+=m;
+                }
+            }
+        };
+        while(l.indexOf("--")>0){
+            l=l.replace("--","-")
+        }
+        //alert(l);
+        $('#af2').val(l);
+    }
+    function getchar(f,e){
+        for(var g in d){
+            if(d[g].indexOf(f)!=-1){
+                if($('#dx').is(':checked'))
+                {
+                    return first_up(g);
+                }
+                else
+                {
+                    return g;
+                }
+                break;
+            }
+        }
+        return false
+    }
+    //首字母大写
+    function first_up(e){
+        if(e.length>0){
+            var g=e.substr(0,1).toUpperCase();
+            var f=e.substr(1,e.length);
+            return g+f;
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,218 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{title}} {%endblock%}
+{% block content %}
+<div class="homeblock" style="margin-top: 10px;">
+    <div class="title"><span>最新项目</span><a href="/project/list"><span class="fr more">查看更多<i class="iconfont icon-arrow"></i></span></a></div>
+    <div class="containter">
+        <ol class="rounded-list" id="hometab1">
+     <!--       <li><a href="/project/detail">项目1<span class="fr">2017-08-01</span></a></li>
+            <li><a href="/project/detail">项目2<span class="fr">2017-08-01</span></a></li>
+            <li><a href="/project/detail">项目3<span class="fr">2017-08-01</span></a></li>-->
+        </ol>
+    </div>
+</div>
+<div class="header"><span id="datenow"></span>
+    <div class="custom fr" style="position: relative;">
+        <i class="iconfont icon-rili sidebar-toggle" data-toggle="dropdown"></i>
+        <ul class="dropdown-menu" style="min-width: 100px;top:30px;" id="yearShow">
+            <li><a actiondate="全部">全部</a></li>
+          <!--  <li><a>2015年</a></li>
+            <li><a>2016年</a></li>
+            <li><a>2017月</a></li>-->
+        </ul>
+</div>
+</div>
+<div class="homeblock">
+<div class="title"><span class="left"><span id="currenttime"></span>项目情况</span></div>
+<div class="containter">
+    <div id="monthchart" style="width:100%;height:200px;"></div>
+</div>
+</div>
+<!--<div class="homeblock">
+    <div class="title"><span class="left">总项目</span><span class="fr">10</span></div>
+    <div class="containter">
+        <div id="totalchart" style="width:100%;height:200px;"></div>
+    </div>
+</div>-->
+<div class="footer"><div class="line"></div><span>云仙智慧</span><div class="line"></div></div>
+{% endblock %}
+{% block script %}
+<script src="http://echarts.baidu.com/dist/echarts.simple.min.js"></script>
+<script src="http://echarts.baidu.com/asset/theme/roma.js"></script>
+<script>
+    function initList()
+    {
+        $.ajax({
+            type : "post",
+            async:false,
+            url:host+"/PFServiceAPI.asmx/GetProjectList",
+            data:{"PageRequestData":'{"Token":"123456789",Page:"1",Rows:"3",IsValid:"1",Obj:""}'},
+            success : function(data){
+                $.each(data.obj.rows,function(i){
+                    var CreateDate = as().formatDateString(this.CreateDate, "-", false);
+                    var li=' <li><a href="/project/detail?id='+this.ProjectGuid+'" >'+this.ProjectName+'<span class="fr">'+CreateDate+'</span></a></li>';
+                    $("#hometab1").append(li);
+                });
+            },
+            timeout:1000,
+            error:function(e){
+                as().showAlert("连接出错！");
+            }
+        });
+    }
+
+
+    function initTotalInfo()
+    {
+        var nowdate = new Date();
+        var y = nowdate.getFullYear();
+        var m = nowdate.getMonth()+1;
+        var d = nowdate.getDate();
+        $("#datenow").html(m+"/"+d+"/"+y);
+        var y1=y-1;
+        var y2=y-2;
+        $("#yearShow").append('<li><a actiondate="'+y2+'">'+y2+'年</a></li>');
+        $("#yearShow").append('<li><a actiondate="'+y1+'">'+y1+'年</a></li>');
+        $("#yearShow").append('<li><a actiondate="'+y+'">'+y+'年</a></li>');
+        ChangeCurrentTotal(y,[]);
+        $("#yearShow a").click(function(){
+            var date=$(this).attr("actiondate");
+            var xLable=date=="全部"?[y2,y1,y]:[];
+            ChangeCurrentTotal(date,xLable);
+        });
+    }
+
+    function ChangeCurrentTotal(date,xLable)
+    {
+
+        $("#yearShow a.selected").removeClass("selected");
+        $("#yearShow a[actiondate='"+date+"']").addClass("selected");
+        $("#currenttime").html(date);
+        var parm=date=="全部"?"":date;
+        var totalData={name:xLable,data:[]};
+        $.ajax({
+            type : "post",
+            async:false,
+            url : host+"/PFServiceAPI.asmx/ProjectStatistics",
+            data:{"RequestData":'{"Token":"123456789",IsValid:"1",Obj:"'+parm+'"}'},
+            success : function(data){
+               if(parm=="")
+               {
+                   var newdata={};
+                   $.each(data.obj, function () {
+                       newdata[this.Month]=this.Count;
+                   });
+                   var newtotalData={name:[],data:[]};
+                   for(var i in xLable){
+                      var y=xLable[i];
+                      var num=newdata[y];
+                      num=typeof(num)=="undefined"?0:num;
+                       newtotalData.name.push(y+"年");
+                       newtotalData.data.push(num);
+                   }
+                   SetTotalChart(newtotalData);
+
+               }else {
+                   $.each(data.obj, function () {
+                       totalData.name.push(this.Month + "月");
+                       totalData.data.push(this.Count);
+                   });
+                   SetTotalChart(totalData);
+               }
+            },
+            timeout:1000,
+            error:function(e){
+                as().showAlert("连接出错！");
+            }
+        });
+    }
+
+    function SetTotalChart(totalData)
+    {
+        var myChart1 = echarts.init(document.getElementById('monthchart'));
+        var option1 = {
+            tooltip : {
+                trigger: 'axis'
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data : totalData.name//['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月']
+                }
+            ],
+            interval:10,
+            yAxis : [
+                {
+                    show:true,
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    type:'line',
+                    symbol:'emptyCircle',
+                    smooth: true,
+                    symbolSize:8,
+                    itemStyle: {
+                        normal: {
+                            color: "#333",
+                            lineStyle: {            // 系列级个性化折线样式，横向渐变描边
+                                width: 3,
+                                color:'rgba(255,0,0,0.8)',
+                                shadowColor : 'rgba(0,0,0,0.5)',
+                                shadowBlur: 10,
+                                shadowOffsetX: 8,
+                                shadowOffsetY: 8
+                            },
+                            label : {
+                                show: true,
+                                textStyle : {
+                                    fontWeight : '400',
+                                    fontSize : '12',
+                                    color:'#333'
+                                }
+                            }
+                        },
+                        emphasis : {
+                            label : {show: true}
+                        }
+                    },
+                    data:  totalData.data
+
+                }
+            ]
+        };
+        myChart1.setOption(option1);
+    }
+
+
+/*    function SetTotalChart2(data)
+    {
+        var myChart2 = echarts.init(document.getElementById('totalchart'));
+        var option2 = {
+            series : [
+                {
+                    name: '总情况项目',
+                    type: 'pie',
+                    radius: '55%',
+                    //roseType: 'angle',
+                    radius: ['50%', '90%'],
+                    data:[
+                        {value:235, name:'未开始'},
+                        {value:274, name:'正在进行'},
+                        {value:310, name:'已经完成'}
+                    ]
+                }
+            ]
+        };
+        myChart2.setOption(option2);
+    }*/
+
+    $(function () {
+        initList();
+        initTotalInfo();
+    });
+</script>
+{% endblock %}

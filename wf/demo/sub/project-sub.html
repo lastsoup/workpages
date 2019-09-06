@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>智慧医疗</title>
+    <link href="/css/base.css"  rel='stylesheet' type='text/css' />
+    <link href="/css/themes/xl-default/easyui.css"  rel='stylesheet' type='text/css' />
+    <link href="/css/iframe.css"  rel='stylesheet' type='text/css' />
+    <script src="/js/jquery-1.8.3.min.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="ecg-page">
+    <div id="mini-toolbar" class="mini-toolbar" style="border-bottom: 0;">
+    </div>
+    <div id="viewCt">
+    </div>
+    <table id="dg"  data-options="
+                rownumbers:true,
+                singleSelect:true,
+                autoRowHeight:false,
+                pagination:true,
+                fitColumns:true" style="width:100%;">
+        <thead>
+        <tr>
+            <th field="inv" width="80">工程名称 </th>
+            <th field="date" width="100">审核状态</th>
+            <th field="name" width="80">合同金额</th>
+            <th field="amount" width="80" align="right">Amount</th>
+            <th field="price" width="80" align="right">Price</th>
+            <th field="cost" width="100" align="right">Cost</th>
+            <th field="note" width="110">Note</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<script src="/js/gantt/core.js" type="text/javascript"></script>
+<script src="/js/gantt/boot.js" type="text/javascript"></script>
+<script src="/js/gantt/toolbar.js" type="text/javascript"></script>
+<script src="/js/gantt/ProjectPlan.js" type="text/javascript"></script>
+<script src="/js/gantt/ProjectPlan.js" type="text/javascript"></script>
+<script src="/js/easyui/base/jquery.parser.js" type="text/javascript"></script>
+<script src="/js/easyui/base/jquery.resizable.js" type="text/javascript"></script>
+<script src="/js/easyui/base/jquery.linkbutton.js" type="text/javascript"></script>
+<script src="/js/easyui/base/jquery.pagination.js" type="text/javascript"></script>
+<script src="/js/easyui/base/jquery.panel.js" type="text/javascript"></script>
+<script src="/js/easyui/plugins/jquery.datagrid.js" type="text/javascript"></script>
+<script src="/js/easyui/plugins/jquery.easyui.plugin.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        //加载甘特图
+        loadGantt();
+        subdemo.init();
+    });
+
+
+    (function($){
+        function pagerFilter(data){
+            if ($.isArray(data)){    // is array
+                data = {
+                    total: data.length,
+                    rows: data
+                }
+            }
+            var dg = $(this);
+            var state = dg.data('datagrid');
+            var opts = dg.datagrid('options');
+            if (!state.allRows){
+                state.allRows = (data.rows);
+            }
+            var start = (opts.pageNumber-1)*parseInt(opts.pageSize);
+            var end = start + parseInt(opts.pageSize);
+            data.rows = $.extend(true,[],state.allRows.slice(start, end));
+            return data;
+        }
+
+        var loadDataMethod = $.fn.datagrid.methods.loadData;
+        $.extend($.fn.datagrid.methods, {
+            clientPaging: function(jq){
+                return jq.each(function(){
+                    var dg = $(this);
+                    var state = dg.data('datagrid');
+                    var opts = state.options;
+                    opts.loadFilter = pagerFilter;
+                    var onBeforeLoad = opts.onBeforeLoad;
+                    opts.onBeforeLoad = function(param){
+                        state.allRows = null;
+                        return onBeforeLoad.call(this, param);
+                    }
+                    dg.datagrid('getPager').pagination({
+                        onSelectPage:function(pageNum, pageSize){
+                            opts.pageNumber = pageNum;
+                            opts.pageSize = pageSize;
+                            $(this).pagination('refresh',{
+                                pageNumber:pageNum,
+                                pageSize:pageSize
+                            });
+                            dg.datagrid('loadData',state.allRows);
+                        }
+                    });
+                    $(this).datagrid('loadData', state.data);
+                    if (opts.url){
+                        $(this).datagrid('reload');
+                    }
+                });
+            },
+            loadData: function(jq, data){
+                jq.each(function(){
+                    $(this).data('datagrid').allRows = null;
+                });
+                return loadDataMethod.call($.fn.datagrid.methods, jq, data);
+            },
+            getAllRows: function(jq){
+                return jq.data('datagrid').allRows;
+            }
+        })
+    })(jQuery);
+    var subdemo={
+        init:function(){
+            $('#dg').datagrid({
+                data:this.getData(),
+                pageSize: 15, //每页显示的记录条数，默认为10
+                pageList: [2, 5, 10, 15, 20, 25, 40] //可以设置每页记录条数的列表
+            }).datagrid('clientPaging').resize();
+            //设置分页控建显示
+            var p = $('#dg').datagrid('getPager');
+            $(p).pagination({
+                beforePageText: '第', //页数文本框前显示的汉字
+                afterPageText: '页    共 {pages} 页',
+                displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录'
+            });
+        },
+        getData:function(){
+            var rows = [];
+            for(var i=1; i<=20; i++){
+                var amount = Math.floor(Math.random()*1000);
+                var price = Math.floor(Math.random()*1000);
+                rows.push({
+                    inv: '人工费'+i,
+                    date: "2017-10-1",
+                    name: '利润'+i,
+                    amount: amount,
+                    price: price,
+                    cost: amount*price,
+                    note: 'Note '+i
+                });
+            }
+            return rows;
+        }
+    }
+
+</script>
+</body>
+</html>
+
